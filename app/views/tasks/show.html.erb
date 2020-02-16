@@ -3,11 +3,13 @@
 <table border="1">
     <tr>
         <th>タスク内容</th>
+        <th>タスク状況</th>
         <th>作成日時</th>
         <th>更新日時</th>
     </tr>
     <tr>
         <td><%= @task.content %></td>
+        <td><%= @task.status %></td>
         <td><%= @task.created_at %></td>
         <td><%= @task.updated_at %></td>
     </tr>
