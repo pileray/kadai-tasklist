@@ -1,9 +1,14 @@
 class TasksController < ApplicationController
   
   before_action :set_task, only:[:show, :edit, :update, :destroy]
+  before_action :require_logged_in, only:[:show, :new, :create, :edit, :update, :destroy]
     
   def index
-    @task = Task.all
+    if logged_in?
+      @task = Task.all
+    else
+      redirect_to login_url
+    end
   end
   
   def show
