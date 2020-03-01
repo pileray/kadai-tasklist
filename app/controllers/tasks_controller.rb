@@ -1,11 +1,11 @@
 class TasksController < ApplicationController
   
+  before_action :require_logged_in, only:[:show, :new, :create, :edit, :update, :destroy, :set_task]
   before_action :set_task, only:[:show, :edit, :update, :destroy]
-  before_action :require_logged_in, only:[:show, :new, :create, :edit, :update, :destroy]
     
   def index
     if logged_in?
-      @task = Task.all
+      @task = current_user.tasks.order(id: :desc)
     else
       redirect_to login_url
     end
@@ -19,7 +19,7 @@ class TasksController < ApplicationController
   end
     
   def create
-    @task = Task.new(task_params)
+    @task = current_user.tasks.build(task_params)
     
     if @task.save
       flash[:success] = 'タスクが正常に追加されました'
@@ -54,7 +54,10 @@ class TasksController < ApplicationController
   private
   
   def set_task
-    @task = Task.find(params[:id])
+    @task = current_user.tasks.find_by(id: params[:id])
+    unless @task
+      redirect_to root_url
+    end
   end
   
   def task_params
